@@ -1,4 +1,3 @@
-"use strict";
 
 const TASK_COUNT = 3;
 
@@ -114,7 +113,7 @@ const createSortingTemplate = () => {
       <a href="#" class="board__filter">SORT BY DATE up</a>
       <a href="#" class="board__filter">SORT BY DATE down</a>
     </div>`
-  )
+  );
 };
 
 const createTaskTemplate = () => {
@@ -366,7 +365,9 @@ const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
+
 const siteMainElement = document.querySelector(`.main`);
+
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 render(siteHeaderElement, createSiteMenuTemplate());
