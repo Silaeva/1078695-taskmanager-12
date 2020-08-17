@@ -1,4 +1,9 @@
-const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
+const COLORS = [
+  `black`,
+  `yellow`,
+  `blue`,
+  `green`,
+  `pink`];
 
 const MAX_DAYS_GAP = 7;
 
