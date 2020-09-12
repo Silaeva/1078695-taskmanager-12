@@ -8,7 +8,7 @@ import TaskNewPresenter from "./task-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
 import {filter} from "../utils/filter.js";
-import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
+import {SortType, UpdateType, UserAction} from "../const.js";
 
 const TASK_COUNT_PER_STEP = 8;
 
@@ -34,8 +34,6 @@ class Board {
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._tasksModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
 
     this._taskNewPresenter = new TaskNewPresenter(this._taskListComponent, this._handleViewAction);
   }
@@ -44,13 +42,25 @@ class Board {
     render(this._boardContainer, this._boardComponent);
     render(this._boardComponent, this._taskListComponent);
 
+    this._tasksModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderBoard();
   }
 
-  createTask() {
-    this._currentSortType = SortType.DEFAULT;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-    this._taskNewPresenter.init();
+  destroy() {
+    this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+
+    remove(this._taskListComponent);
+    remove(this._boardComponent);
+
+    this._tasksModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
+
+
+  createTask(callback) {
+    this._taskNewPresenter.init(callback);
   }
 
   _getTasks() {
@@ -75,7 +85,7 @@ class Board {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _handleViewAction(actionType, updateType, update) { // обрабатывает действия пользователя
+  _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
         this._tasksModel.updateTask(updateType, update);
@@ -89,10 +99,9 @@ class Board {
     }
   }
 
-  _handleModelEvent(updateType, data) { // обрабатывает изменение данных
+  _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this._taskPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
