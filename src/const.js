@@ -1,10 +1,3 @@
-const COLORS = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`];
-
 const MAX_DAYS_GAP = 7;
 
 const TASK_COUNT = 22;
@@ -36,4 +29,20 @@ const FilterType = {
   ARCHIVE: `archive`
 };
 
-export {COLORS, MAX_DAYS_GAP, TASK_COUNT, SortType, UserAction, UpdateType, FilterType};
+const MenuItem = {
+  ADD_NEW_TASK: `ADD_NEW_TASK`,
+  TASKS: `TASKS`,
+  STATISTICS: `STATISTICS`
+};
+
+const Color = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`
+};
+
+const COLORS = Object.values(Color);
+
+export {MAX_DAYS_GAP, TASK_COUNT, SortType, UserAction, UpdateType, FilterType, MenuItem, Color, COLORS};
